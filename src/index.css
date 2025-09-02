@@ -2,7 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-/* App-wide tweaks */
-html, body, #root {
-  height: 100%;
-}
+/* You can add custom CSS below if you like */

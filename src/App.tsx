@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useEffect } from "react";
 
 export default function App(): JSX.Element {
@@ -8,11 +7,16 @@ export default function App(): JSX.Element {
   const mailHref = `mailto:${email}`;
   const canonical = "https://oddeeconsultancy.co.uk/";
 
+  // SEO + defensive light theme
   useEffect(() => {
     const setMeta = (name: string, content: string, attr: "name" | "property" = "name") => {
       if (!content) return;
       let el = document.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
-      if (!el) { el = document.createElement("meta"); el.setAttribute(attr, name); document.head.appendChild(el); }
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, name);
+        document.head.appendChild(el);
+      }
       el.setAttribute("content", content);
     };
     document.title = "Oddee Consulting | UK Engineering Consultancy for Energy Efficiency & Net-Zero";
@@ -20,22 +24,43 @@ export default function App(): JSX.Element {
     if (!link) { link = document.createElement("link"); link.rel = "canonical"; document.head.appendChild(link); }
     link.href = canonical;
 
-    setMeta("description","UK engineering consultancy focused on energy efficiency, emissions reduction, value engineering and cost reduction.");
-    setMeta("robots","index,follow");
-    setMeta("og:title","Oddee Consulting — UK Energy & Net-Zero Engineering Consultancy","property");
-    setMeta("og:description","Engineering design, problem solving, management consulting, material & cost reduction, and net-zero delivery across the UK.","property");
-    setMeta("og:type","website","property");
-    setMeta("og:url",canonical,"property");
-    setMeta("twitter:card","summary_large_image");
-    setMeta("twitter:title","Oddee Consulting — Engineering for UK Energy & Net-Zero");
-    setMeta("twitter:description","UK engineering consultancy driving energy savings, emissions reduction and cost-out.");
+    setMeta("description", "Oddee Consulting: engineering design, problem solving, management consulting, material & cost reduction, and net-zero delivery across the UK.");
+    setMeta("robots", "index,follow");
+    setMeta("og:title", "Oddee Consulting — UK Energy & Net-Zero Engineering Consultancy", "property");
+    setMeta("og:description", "Engineering design, problem solving, value engineering & emissions reduction across the UK.", "property");
+    setMeta("og:type", "website", "property");
+    setMeta("og:url", canonical, "property");
+    setMeta("twitter:card", "summary_large_image");
+    setMeta("twitter:title", "Oddee Consulting — Engineering for UK Energy & Net-Zero");
+    setMeta("twitter:description", "UK engineering consultancy driving energy savings, emissions reduction and cost-out.");
+
+    // Force light theme and ensure readable headings vs any global dark styles
+    document.documentElement.classList.remove("dark");
+    document.body.style.background = "#ffffff";
+    const styleId = "oddee-home-override";
+    if (!document.getElementById(styleId)) {
+      const s = document.createElement("style");
+      s.id = styleId;
+      s.textContent = `
+        html, body, #root { background:#ffffff !important; }
+        :root { color-scheme: light; }
+        .oddee, .oddee section, .oddee footer, .oddee .card { background:#ffffff !important; }
+        .oddee .section-head h2, .oddee .card h3, .oddee h1 { color:#0A0F0D !important; }
+        .oddee .hero { background:#0F3A30 !important; color:#E8D7B1 !important; }
+        .oddee .hero h1 { color:#E8D7B1 !important; }
+        .oddee .contact-bar { background:#0A0F0D !important; color:#E8D7B1 !important; }
+        .oddee .contact-bar a { color:#E8D7B1 !important; }
+        .oddee .muted { color:#5b667a !important; }
+      `;
+      document.head.appendChild(s);
+    }
   }, []);
 
   return (
     <div className="oddee">
       <style>{`
         :root { --green:#0F3A30; --sand:#E8D7B1; --ink:#0A0F0D; --txt:#0b1220; }
-        .oddee { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--txt); background:#fff; }
+        .oddee { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--txt); }
         *{box-sizing:border-box} .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
         header.nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:saturate(160%) blur(8px);border-bottom:1px solid #eaeaea}
         .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
@@ -70,12 +95,11 @@ export default function App(): JSX.Element {
       {/* HEADER / NAV */}
       <header className="nav">
         <div className="wrap nav-inner">
-          <a href="#top" className="brand" aria-label="Oddee Consulting home">
+          <a href="/" className="brand" aria-label="Oddee Consulting home">
             <span className="brand-title"><span className="t1">ODDEE</span><br/><span className="t2">Consulting</span></span>
           </a>
           <nav aria-label="primary">
-            <a href="#services">Services</a>
-            <a href="#sectors">Sectors</a>
+            <a href="/services">Services</a>
             <a href="#approach">Approach</a>
             <a href="#faq">FAQ</a>
             <a href="#contact">Contact</a>
@@ -90,7 +114,11 @@ export default function App(): JSX.Element {
           <div>
             <p className="eyebrow">UK ENERGY • ENGINEERING • NET-ZERO</p>
             <h1>Engineering consultancy for UK energy efficiency and emissions reduction.</h1>
-            <p className="lead">We design, solve, and deliver—engineering design, problem solving, management consulting, and value engineering for material & cost reduction. We run energy audits, decarbonisation roadmaps, and implementation with measurable ROI.</p>
+            <p className="lead">
+              We specialise in engineering design, solving hard engineering problems,
+              management consulting, and material/cost reduction—while helping organisations
+              decarbonise toward net-zero. AI & web are adjacent accelerators, not the headline.
+            </p>
             <div className="hero-ctas">
               <a className="cta" href="#contact" style={{background:"var(--sand)",color:"#0A0F0D",borderColor:"var(--sand)"}}>Contact Us</a>
             </div>
@@ -109,7 +137,7 @@ export default function App(): JSX.Element {
                 ["Deliver & Integrate","Procurement support, installation oversight, automation/data hooks."],
                 ["Verify & Optimise","M&V, dashboards, savings assurance, continuous improvement."],
               ].map(([t,d]) => (
-                <li key={t}><span className="tick">✓</span><div><div style={{fontWeight:600}}>{t}</div><div className="muted">{d}</div></div></li>
+                <li key={t}><span style={{marginRight:8}}>✓</span><span style={{fontWeight:600}}>{t}</span><div className="muted">{d}</div></li>
               ))}
             </ul>
             <div style={{marginTop:16}}><a className="cta" href="#contact">Contact Us</a></div>
@@ -118,130 +146,7 @@ export default function App(): JSX.Element {
       </section>
 
       <main>
-        {/* SERVICES */}
+        {/* SERVICES SUMMARY */}
         <section id="services" aria-label="Core services">
           <div className="wrap">
             <h2 style={{fontSize:36,margin:0}}>Core engineering services</h2>
-            <p className="muted" style={{marginTop:8}}>Outcome-driven, standards-aligned delivery across the UK.</p>
-            <div className="cards" style={{gridTemplateColumns:"repeat(4,1fr)"}}>
-              {[
-                ["Engineering Design","Concept → detail design, drawings, DFMA, compliance, verification."],
-                ["Problem Solving","Root cause, reliability, test plans, remediation with evidence."],
-                ["Management Consulting","Operating cadence, PMO, suppliers, governance, make/buy."],
-                ["Material & Cost Reduction","Value engineering, process optimisation, alt materials."],
-                ["Energy Audits & ESOS","Opportunity registers, ROI/CO2e modelling, evidence packs."],
-                ["Net-Zero Roadmaps","SECR support, carbon baselining, abatement curve, sequencing."],
-                ["Implementation & M&V","Installation oversight, commissioning, measurement & verification."],
-                ["Digital Enablement (adjacent)","Lightweight automation and dashboards when useful."],
-              ].map(([h,b]) => (
-                <article className="card" key={h}>
-                  <h3>{h}</h3><p className="muted">{b}</p>
-                  <p style={{marginTop:10}}><a className="cta" href="#contact">Contact Us</a></p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* SECTORS */}
-        <section id="sectors" className="dark" aria-label="Sectors">
-          <div className="wrap two">
-            <div>
-              <h2 style={{fontSize:36,margin:0}}>Where we operate</h2>
-              <p className="muted" style={{color:"#cbd5e1"}}>Utilities, industrial sites, campuses & estates across the United Kingdom.</p>
-            </div>
-            <div style={{textAlign:"right"}}><a className="cta" href="#contact" style={{background:"transparent",color:"var(--sand)",borderColor:"var(--sand)"}}>Contact Us</a></div>
-          </div>
-          <div className="wrap chips">
-            {["Energy & Utilities","Manufacturing & Industrial","Aerospace & Automotive","Healthcare & MedTech","Built Environment & PropTech","Logistics & Warehousing","Consumer Products","Public Sector & NGOs"].map(s => <div className="chip" key={s}>{s}</div>)}
-          </div>
-        </section>
-
-        {/* APPROACH */}
-        <section id="approach" aria-label="Our approach">
-          <div className="wrap two">
-            <div>
-              <h2 style={{fontSize:36,margin:0}}>Approach that de-risks delivery</h2>
-              <p className="muted">Pragmatic methodology that compresses time-to-value and locks in energy & cost savings.</p>
-            </div>
-            <div>
-              <div className="cards" style={{gridTemplateColumns:"1fr 1fr"}}>
-                {[
-                  ["Discover","Baseline cost & CO2e, constraints, business case (ESOS/SECR-aware)."],
-                  ["Design","Options, engineering design, procurement spec, safety & compliance."],
-                  ["Deliver","Install, commission, operator training, documentation."],
-                  ["Optimise","M&V, dashboards, continuous improvement, savings assurance."],
-                ].map(([h,b],i) => (
-                  <div className="card" key={h}>
-                    <div className="muted" style={{textTransform:"uppercase",fontSize:12}}>Phase {i+1}</div>
-                    <h3>{h}</h3>
-                    <p className="muted">{b}</p>
-                    <p style={{marginTop:10}}><a className="cta" href="#contact">Contact Us</a></p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section id="faq" aria-label="Frequently asked questions">
-          <div className="wrap">
-            <h2 style={{fontSize:36,margin:0}}>FAQ</h2>
-            <div className="cards">
-              {[
-                ["Do you cover ESOS/SECR?","Yes. We build evidence packs and roadmaps aligned to ESOS and SECR, focusing on projects with the best ROI/CO2e impact."],
-                ["How fast can we see savings?","Priority fixes often land within 6–12 weeks depending on scope and procurement."],
-                ["Do you work nationwide?","Yes, we operate across the UK and can support multi-site estates."],
-              ].map(([q,a]) => (
-                <article className="card" key={q}>
-                  <h3>{q}</h3><p className="muted">{a}</p>
-                </article>
-              ))}
-            </div>
-            <p style={{marginTop:16}}><a className="cta" href="#contact">Contact Us</a></p>
-          </div>
-        </section>
-      </main>
-
-      {/* CONTACT */}
-      <section id="contact" aria-label="Contact Oddee Consulting">
-        <div className="wrap two">
-          <div>
-            <h2 style={{fontSize:36,margin:0}}>Speak to an engineer</h2>
-            <p className="muted">Share your constraints and KPIs. We’ll map options and the fastest, lowest-risk route to value.</p>
-            <address className="muted" style={{marginTop:16}}>
-              📞 <a href={telHref} style={{color:"inherit",textDecoration:"none"}}>{phone}</a><br/>
-              ✉️ <a href={mailHref} style={{color:"inherit",textDecoration:"none"}}>{email}</a><br/>
-              📍 United Kingdom
-            </address>
-          </div>
-          <form className="form stack" onSubmit={(e)=>{e.preventDefault(); window.location.href = mailHref;}}>
-            <div className="stack">
-              <input className="input" placeholder="Full name" required aria-label="Full name" />
-              <input className="input" type="email" placeholder="Work email" required aria-label="Work email" />
-              <input className="input" placeholder="Company" aria-label="Company" />
-              <textarea className="textarea" placeholder="Describe your energy or engineering challenge" aria-label="Project description"></textarea>
-              <button className="cta" type="submit">Contact Us</button>
-              <small className="muted">By submitting, you agree to our privacy policy.</small>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="footer">
-        <div className="wrap footer-inner">
-          <p className="muted" style={{color:"var(--sand)"}}>
-            © {new Date().getFullYear()} Oddee Consulting. UK Engineering Consultancy for Energy & Net-Zero.
-          </p>
-          <div style={{display:"flex",gap:18}}>
-            <a href="#services" style={{color:"var(--sand)",textDecoration:"none"}}>Services</a>
-            <a href="#approach" style={{color:"var(--sand)",textDecoration:"none"}}>Approach</a>
-            <a href="#contact" style={{color:"var(--sand)",textDecoration:"none"}}>Contact Us</a>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}

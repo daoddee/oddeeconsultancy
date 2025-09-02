@@ -3,9 +3,24 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckCircle2, Rocket, LineChart, Shield, Users2, ArrowRight, Building2, Phone, Mail, MapPin } from "lucide-react";
+import {
+  CheckCircle2,
+  Rocket,
+  LineChart,
+  Shield,
+  Users2,
+  ArrowRight,
+  Building2,
+  Phone,
+  Mail,
+  MapPin,
+  Factory,
+  Leaf,
+  Wrench,
+  Cpu
+} from "lucide-react";
 
-// Color tokens aligned to logo
+// Brand tokens
 const brand = {
   green: "#0F3A30", // deep forest
   sand: "#E8D7B1", // beige from logo text
@@ -49,30 +64,31 @@ const Nav = () => (
 );
 
 const Hero = () => (
-  <section
-    className="relative overflow-hidden"
-    style={{ backgroundColor: brand.green, color: brand.sand }}
-  >
+  <section className="relative overflow-hidden" style={{ backgroundColor: brand.green, color: brand.sand }}>
     <div className="max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center">
       <div>
-        <p className="uppercase tracking-[0.3em] text-xs/relaxed mb-4 opacity-90">Strategy • Execution • Outcomes</p>
-        <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">We turn ambiguity into traction.
+        <p className="uppercase tracking-[0.3em] text-xs/relaxed mb-4 opacity-90">Engineering • Net Zero • Digital</p>
+        <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">
+          We turn complex engineering challenges into sustainable traction.
         </h1>
         <p className="mt-5 text-base/7 md:text-lg/8 opacity-95">
-          Oddee Consulting operationalizes growth for founders and leaders who need enterprise-grade thinking without enterprise drag. Zero theatre. Clear levers. Measurable impact.
+          Oddee Consulting solves real engineering problems, accelerates your path to net zero, and ships digital tools that stick.
+          No theatre—just robust design, pragmatic management, and measurable outcomes.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button className="group" style={{ backgroundColor: brand.sand, color: brand.ink }}>
-            Get a Strategy Sprint
+            Start a Project
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
-          <Button variant="outline" className="border-2" style={{ borderColor: brand.sand, color: brand.sand }}>View Case Studies</Button>
+          <Button variant="outline" className="border-2" style={{ borderColor: brand.sand, color: brand.sand }}>
+            View Case Studies
+          </Button>
         </div>
         <div className="mt-8 grid grid-cols-3 gap-6 text-center md:text-left">
           {[
-            { kpi: "+38%", label: "Avg. revenue uplift in 90 days" },
-            { kpi: "<12w", label: "Time-to-value on engagements" },
-            { kpi: "95%", label: "Repeat client rate" },
+            { kpi: "30–50%", label: "efficiency gains from design optimisation" },
+            { kpi: "<24w", label: "time-to-impact on net-zero roadmaps" },
+            { kpi: "95%", label: "client satisfaction & repeat rate" },
           ].map((x) => (
             <div key={x.kpi}>
               <div className="text-2xl font-semibold">{x.kpi}</div>
@@ -81,19 +97,20 @@ const Hero = () => (
           ))}
         </div>
       </div>
+
       <div className="relative">
         <div className="rounded-3xl shadow-2xl p-1 bg-white/10 ring-1 ring-white/20">
           <div className="rounded-3xl bg-white text-slate-900 p-6 md:p-8 min-h-[320px]">
             <div className="flex items-center gap-3">
               <Rocket className="h-5 w-5" />
-              <p className="text-sm font-medium">Strategy Sprint Roadmap</p>
+              <p className="text-sm font-medium">Engagement Blueprint</p>
             </div>
             <ul className="mt-4 space-y-3 text-sm">
               {[
-                { t: "Market reality check", d: "Size, segments, spend, moats." },
-                { t: "Value proposition tuning", d: "Nail the wedge and the win themes." },
-                { t: "Go-to-market engine", d: "ICP, messaging, channels, funnel math." },
-                { t: "Operating cadence", d: "KPIs, dashboards, rituals, accountability." },
+                { t: "Engineering Design Audit", d: "Failure modes, constraints, cost & safety criticals." },
+                { t: "Sustainable Redesign", d: "Materials, energy load, circularity, compliance." },
+                { t: "Operating Model & KPIs", d: "Rituals, dashboards, governance to embed change." },
+                { t: "Digital Enablers", d: "Web/app tooling to automate workflows and reporting." },
               ].map((i) => (
                 <li key={i.t} className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5" />
@@ -105,7 +122,9 @@ const Hero = () => (
               ))}
             </ul>
             <div className="mt-6">
-              <Button style={{ backgroundColor: brand.green, color: brand.sand }} className="w-full">Download Sample Deliverable</Button>
+              <Button style={{ backgroundColor: brand.green, color: brand.sand }} className="w-full">
+                Download Sample Deliverable
+              </Button>
             </div>
           </div>
         </div>
@@ -119,13 +138,15 @@ const Solutions = () => (
     <div className="max-w-7xl mx-auto px-4 md:px-6">
       <div className="max-w-2xl">
         <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Solutions engineered for outcomes</h2>
-        <p className="mt-3 text-slate-600">No fluff decks. We ship operating models and enable teams to run them.</p>
+        <p className="mt-3 text-slate-600">Hard problems, clear levers. We ship designs, operating systems, and digital tools that move the needle.</p>
       </div>
-      <div className="mt-10 grid md:grid-cols-3 gap-6">
+
+      <div className="mt-10 grid md:grid-cols-4 gap-6">
         {[
-          { icon: LineChart, title: "Growth Strategy", body: "Demand mapping, pricing architecture, and portfolio bets that move the P&L." },
-          { icon: Users2, title: "Go-To-Market", body: "ICP definition, messaging, channel mix, and repeatable pipeline design." },
-          { icon: Shield, title: "Operating Model", body: "From OKRs to cadence. Build the dashboard and the behaviors behind it." },
+          { icon: Wrench, title: "Engineering Design", body: "Concept-to-detail design, DFM/DFA, optimisation, safety & compliance." },
+          { icon: Leaf, title: "Net Zero & Sustainability", body: "Energy modelling, decarbonisation roadmaps, LCA, ESG reporting enablement." },
+          { icon: Shield, title: "Management Consulting", body: "Operating models, OKRs, PMO, performance dashboards, change adoption." },
+          { icon: Cpu, title: "Digital & Web", body: "Websites, internal tools, and lightweight apps to streamline operations." },
         ].map(({ icon: Icon, title, body }) => (
           <Card key={title} className="rounded-2xl shadow-sm hover:shadow-md transition-shadow">
             <CardHeader>
@@ -147,21 +168,21 @@ const Sectors = () => (
     <div className="max-w-7xl mx-auto px-4 md:px-6 text-white">
       <div className="flex items-end justify-between gap-6 flex-wrap">
         <div>
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Where we play</h2>
-          <p className="mt-2 text-slate-300 max-w-xl">We specialize in complex, margin-sensitive environments where execution risk is the bottleneck.</p>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Where we operate</h2>
+          <p className="mt-2 text-slate-300 max-w-xl">Execution-heavy environments with tight margins and safety-critical outcomes.</p>
         </div>
         <Button variant="outline" className="border-2" style={{ borderColor: brand.sand, color: brand.sand }}>See Use Cases</Button>
       </div>
 
       <div className="mt-10 grid md:grid-cols-4 gap-4">
         {[
-          "B2B SaaS",
-          "Professional Services",
-          "Industrial & Supply Chain",
-          "Consumer & eCommerce",
-          "Fintech & Payments",
-          "Health & MedTech",
-          "Real Estate & PropTech",
+          "Manufacturing & Industrial",
+          "Energy & Utilities",
+          "Built Environment",
+          "Transport & Mobility",
+          "MedTech & Devices",
+          "Aerospace & Defence",
+          "Food & FMCG",
           "Public Sector & NGOs",
         ].map((s) => (
           <div key={s} className="rounded-2xl p-5 border bg-white/5 backdrop-blur">
@@ -181,15 +202,15 @@ const Approach = () => (
     <div className="max-w-7xl mx-auto px-4 md:px-6">
       <div className="grid md:grid-cols-3 gap-8 items-start">
         <div className="md:col-span-1">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Our operating system</h2>
-          <p className="mt-3 text-slate-600">A pragmatic, no-theatre methodology that compresses time-to-value.</p>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Our delivery model</h2>
+          <p className="mt-3 text-slate-600">A no-theatre methodology that compresses time-to-value and derisks execution.</p>
         </div>
         <div className="md:col-span-2 grid md:grid-cols-2 gap-6">
           {[
-            { h: "Diagnose", p: "We pressure-test assumptions against market reality and unit economics." },
-            { h: "Design", p: "We architect the growth engine—roles, rituals, KPIs, enablement." },
-            { h: "Deploy", p: "We launch campaigns and cadences with your team, not at them." },
-            { h: "Drive", p: "Weekly governance, dashboards, and course-corrects until it sticks." },
+            { h: "Diagnose", p: "Baseline performance, constraints, energy loads, and risk/regs." },
+            { h: "Design", p: "Engineer solutions and operating models anchored to KPIs." },
+            { h: "Deploy", p: "Pilot fast, iterate with operators, codify SOPs and guardrails." },
+            { h: "Drive", p: "Embed governance, dashboards, and continuous improvement." },
           ].map((s, i) => (
             <Card key={s.h}>
               <CardHeader>
@@ -211,18 +232,22 @@ const Insights = () => (
       <div className="flex items-end justify-between gap-6 flex-wrap">
         <div>
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Insights & Signals</h2>
-          <p className="mt-2 opacity-90">Point-of-view that cuts through noise and drives board-level decisions.</p>
+          <p className="mt-2 opacity-90">Operator-grade guidance—design, decarbonisation, and digital enablement.</p>
         </div>
         <Button style={{ backgroundColor: brand.sand, color: brand.ink }}>Browse All</Button>
       </div>
 
       <div className="mt-10 grid md:grid-cols-3 gap-6">
-        {[1,2,3].map((i) => (
+        {[
+          { title: "Design for Net Zero: Where to Start", body: "Quick wins vs. capex-heavy moves across heat, process, and logistics." },
+          { title: "From KPIs to Cadence", body: "Building a management rhythm that sustains engineering outcomes." },
+          { title: "Web Tools that Stick", body: "Lightweight apps that remove admin drag and improve data quality." },
+        ].map((card, i) => (
           <Card key={i} className="bg-white/95 text-slate-900">
             <CardHeader>
-              <CardTitle className="text-xl">Playbook #{i}: Pricing that Defends Margin in 2025</CardTitle>
+              <CardTitle className="text-xl">{card.title}</CardTitle>
             </CardHeader>
-            <CardContent className="text-slate-700">A three-step framework to reset price architecture without lighting churn on fire.</CardContent>
+            <CardContent className="text-slate-700">{card.body}</CardContent>
           </Card>
         ))}
       </div>
@@ -234,8 +259,10 @@ const Contact = () => (
   <section id="contact" className="py-16 md:py-24 bg-white">
     <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-10 items-start">
       <div>
-        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Let's pressure-test your growth thesis</h2>
-        <p className="mt-3 text-slate-600">Give us 30 minutes. We'll give you clarity, options, and the fastest path to lift. No obligation.</p>
+        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Let’s scope your engineering objectives</h2>
+        <p className="mt-3 text-slate-600">
+          30 minutes. Clear diagnosis, options, and the fastest path to measurable lift—design, net zero, or digital.
+        </p>
         <div className="mt-6 space-y-3 text-slate-700">
           <p className="flex items-center gap-3"><Phone className="h-5 w-5"/> +44 0000 000 000</p>
           <p className="flex items-center gap-3"><Mail className="h-5 w-5"/> hello@oddee.consulting</p>
@@ -247,11 +274,11 @@ const Contact = () => (
           <CardTitle>Book a discovery call</CardTitle>
         </CardHeader>
         <CardContent>
-          <form className="grid gap-4">
+          <form className="grid gap-4" onSubmit={(e) => e.preventDefault()}>
             <Input placeholder="Full name" />
             <Input placeholder="Work email" type="email" />
             <Input placeholder="Company" />
-            <Textarea placeholder="What outcome are you driving?" rows={5} />
+            <Textarea placeholder="What challenge are we solving? (design, net zero, digital…)" rows={5} />
             <Button style={{ backgroundColor: brand.green, color: brand.sand }}>Request Call</Button>
             <p className="text-xs text-slate-500">By submitting, you agree to our privacy policy.</p>
           </form>

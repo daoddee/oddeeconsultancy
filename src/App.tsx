@@ -1,20 +1,40 @@
 // src/App.tsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
+type SubmitState = "idle" | "sending" | "sent" | "error";
 
 export default function App(): JSX.Element {
   const email = "info@oddeeconsultancy.co.uk";
   const phone = "+447365155414";
-  const telHref = `tel:${phone.replace(/\s+/g, "")}`;
-  const mailHref = `mailto:${email}`;
+
+  // Normalise tel: (remove all but leading + and digits)
+  const telHref = useMemo(() => {
+    const normalised = phone.replace(/(?!^\+)[^\d]/g, "");
+    return `tel:${normalised}`;
+  }, [phone]);
+
+  const mailHref = useMemo(() => `mailto:${email}`, [email]);
   const canonical = "https://oddeeconsultancy.co.uk/";
 
-  // contact form UX state (works even without the /api backend)
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle"
-  );
+  const [status, setStatus] = useState<SubmitState>("idle");
   const [errMsg, setErrMsg] = useState("");
+  const abortRef = useRef<AbortController | null>(null);
 
-  // Progressive-enhancement submit: POST to /api/contact if available, else mailto fallback
+  function validate(payload: {
+    name: string;
+    email: string;
+    company: string;
+    message: string;
+  }): string | null {
+    if (!payload.name || payload.name.length < 2) return "Please enter your full name.";
+    if (!payload.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email))
+      return "Please enter a valid work email.";
+    if (!payload.message || payload.message.length < 10)
+      return "Please provide a short description of your project.";
+    return null;
+  }
+
+  // Progressive-enhancement submit with robust timeout + graceful mailto fallback
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrMsg("");
@@ -28,33 +48,68 @@ export default function App(): JSX.Element {
       message: String(fd.get("message") || "").trim(),
     };
 
+    const validationError = validate(payload);
+    if (validationError) {
+      setStatus("error");
+      setErrMsg(validationError);
+      return;
+    }
+
+    // Abort any in-flight request
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    // 10s network timeout
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...payload }),
+        body: JSON.stringify(payload),
+        signal: controller.signal,
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || (data && data.ok === false)) {
-        throw new Error(data?.error || "Failed to send");
+
+      clearTimeout(timeout);
+
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch {
+        // no-op: some backends return empty body on 204/200
       }
+
+      if (!res.ok || (data && data.ok === false)) {
+        throw new Error(data?.error || `Failed to send (HTTP ${res.status})`);
+      }
+
       setStatus("sent");
       (e.target as HTMLFormElement).reset();
-      return;
-    } catch (err: any) {
-      // graceful fallback to mailto
+    } catch (err: unknown) {
+      clearTimeout(timeout);
       setStatus("error");
-      setErrMsg(err?.message || "Could not reach the server.");
-      const subject = encodeURIComponent(`Website enquiry — ${payload.name}`);
-      const body = encodeURIComponent(
-        `Name: ${payload.name}\nEmail: ${payload.email}\nCompany: ${payload.company}\n\nMessage:\n${payload.message}\n`
-      );
-      window.location.href = `${mailHref}?subject=${subject}&body=${body}`;
+      const message =
+        err instanceof DOMException && err.name === "AbortError"
+          ? "Request timed out."
+          : (err as any)?.message || "Could not reach the server.";
+      setErrMsg(message);
+
+      // Graceful fallback to mailto only in the browser
+      if (typeof window !== "undefined") {
+        const subject = encodeURIComponent(`Website enquiry — ${payload.name}`);
+        const body = encodeURIComponent(
+          `Name: ${payload.name}\nEmail: ${payload.email}\nCompany: ${payload.company}\n\nMessage:\n${payload.message}\n`
+        );
+        window.location.href = `${mailHref}?subject=${subject}&body=${body}`;
+      }
     }
   }
 
-  // SEO + defensive light theme + mobile polish
+  // SEO + defensive light theme + mobile polish (browser-only)
   useEffect(() => {
+    if (typeof document === "undefined") return;
+
     const setMeta = (
       name: string,
       content: string,
@@ -72,9 +127,8 @@ export default function App(): JSX.Element {
 
     document.title =
       "Oddee Consulting | UK Engineering Consultancy for Energy Efficiency & Net-Zero";
-    let link = document.querySelector('link[rel="canonical"]') as
-      | HTMLLinkElement
-      | null;
+
+    let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!link) {
       link = document.createElement("link");
       link.rel = "canonical";
@@ -87,27 +141,13 @@ export default function App(): JSX.Element {
       "Oddee Consulting: UK engineering design, problem solving, management consulting, material & cost reduction, and net-zero delivery."
     );
     setMeta("robots", "index,follow");
-    setMeta(
-      "og:title",
-      "Oddee Consulting — UK Energy & Net-Zero Engineering Consultancy",
-      "property"
-    );
-    setMeta(
-      "og:description",
-      "Engineering design, problem solving, value engineering & emissions reduction across the UK.",
-      "property"
-    );
+    setMeta("og:title", "Oddee Consulting — UK Energy & Net-Zero Engineering Consultancy", "property");
+    setMeta("og:description", "Engineering design, problem solving, value engineering & emissions reduction across the UK.", "property");
     setMeta("og:type", "website", "property");
     setMeta("og:url", canonical, "property");
     setMeta("twitter:card", "summary_large_image");
-    setMeta(
-      "twitter:title",
-      "Oddee Consulting — Engineering for UK Energy & Net-Zero"
-    );
-    setMeta(
-      "twitter:description",
-      "UK engineering consultancy driving energy savings, emissions reduction and cost-out."
-    );
+    setMeta("twitter:title", "Oddee Consulting — Engineering for UK Energy & Net-Zero");
+    setMeta("twitter:description", "UK engineering consultancy driving energy savings, emissions reduction and cost-out.");
 
     // Force a light surface even if a global dark theme is present
     document.documentElement.classList.remove("dark");
@@ -120,17 +160,12 @@ export default function App(): JSX.Element {
       s.textContent = `
         html, body, #root { background:#ffffff !important; }
         :root { color-scheme: light; }
-        /* keep content legible */
         .oddee, .oddee section, .oddee footer, .oddee .card { background:#ffffff; }
         .oddee .section-head h2, .oddee .card h3, .oddee h1 { color:#0A0F0D; }
-
-        /* brand sections */
         .oddee .hero { background:#0F3A30; color:#E8D7B1; }
         .oddee .hero h1 { color:#E8D7B1; }
         .oddee .contact-bar { background:#0A0F0D; color:#E8D7B1; }
         .oddee .contact-bar a { color:#E8D7B1; }
-
-        /* mobile polish */
         @media (max-width: 980px) {
           .nav-inner { padding: 12px 0; }
           .nav-inner nav { display:flex; flex-wrap:wrap; gap:10px; }
@@ -145,7 +180,12 @@ export default function App(): JSX.Element {
       `;
       document.head.appendChild(s);
     }
-  }, []);
+
+    return () => {
+      // Clean up any in-flight request if component unmounts
+      abortRef.current?.abort();
+    };
+  }, [canonical]);
 
   return (
     <div className="oddee">
@@ -154,42 +194,33 @@ export default function App(): JSX.Element {
         .oddee { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--txt); }
         *{box-sizing:border-box}
         .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
-
         header.nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:saturate(160%) blur(8px);border-bottom:1px solid #eaeaea}
         .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
         .brand-title .t1{color:var(--green);font-weight:700;letter-spacing:.04em}
         .brand-title .t2{color:var(--green);font-size:12px;letter-spacing:.18em;text-transform:uppercase}
         nav[aria-label="primary"] a{margin:0 14px;text-decoration:none;color:#2a2f39}
         .cta{padding:12px 16px;border-radius:12px;border:1.5px solid var(--green);color:#fff;background:var(--green);text-decoration:none;display:inline-block}
-
         .hero{background:var(--green);color:var(--sand);padding:72px 0}
         .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
         .eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:12px;opacity:.9}
         h1{font-size:44px;line-height:1.1;margin:10px 0 14px}
         .lead{opacity:.95;line-height:1.7}
-
         .hero-ctas{display:flex;gap:12px;margin-top:20px}
         .hero-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
         .kpi{font-size:26px;font-weight:650}
         .kpi-sub{font-size:12px;opacity:.85}
-
         .panel{border-radius:22px;background:#fff;color:#1c1f24;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:22px}
         main section{padding:70px 0}
         .muted{color:#5b667a}
-
         .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
         .card{border:1px solid #e9ebf0;border-radius:18px;padding:18px}
         .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-
         .form{border:1px solid #e9ebf0;border-radius:18px;padding:18px;background:#fff}
         .input,.textarea{width:100%;padding:12px;border:1px solid #dfe3ea;border-radius:12px}
         .textarea{min-height:120px;resize:vertical}
         .stack{display:grid;gap:12px}
-
         footer.footer{background:var(--ink);color:var(--sand);padding:34px 0;margin-top:10px}
         .footer-inner{display:flex;justify-content:space-between;align-items:center}
-
-        /* Extra small devices */
         @media (max-width:600px){
           nav[aria-label="primary"] a{margin:0 10px}
           .kpi{font-size:22px}
@@ -207,10 +238,10 @@ export default function App(): JSX.Element {
             </span>
           </a>
           <nav aria-label="primary">
-            <a href="/services">Services</a>
+            {/* FIX: anchor to in-page section, not a 404 route */}
+            <a href="#services">Services</a>
             <a href="#approach">Approach</a>
             <a href="#faq">FAQ</a>
-            {/* Valid Contact Us link goes to the contact section */}
             <a href="#contact">Contact Us</a>
           </nav>
           <a className="cta" href="#contact">Contact Us</a>
@@ -250,7 +281,7 @@ export default function App(): JSX.Element {
                 ["Verify & Optimise", "M&V, dashboards, savings assurance, continuous improvement."],
               ].map(([t, d]) => (
                 <li key={t}>
-                  <span style={{ marginRight: 8 }}>✓</span>
+                  <span aria-hidden style={{ marginRight: 8 }}>✓</span>
                   <span style={{ fontWeight: 600 }}>{t}</span>
                   <div className="muted">{d}</div>
                 </li>
@@ -367,7 +398,7 @@ export default function App(): JSX.Element {
             )}
             {status === "error" && (
               <small className="muted" style={{ color: "#fde68a" }}>
-                Couldn’t reach the server; we opened your email client as a fallback. {errMsg && `(${errMsg})`}
+                {errMsg || "Couldn’t reach the server; we opened your email client as a fallback."}
               </small>
             )}
           </form>
@@ -381,7 +412,8 @@ export default function App(): JSX.Element {
             © {new Date().getFullYear()} Oddee Consulting. UK Engineering Consultancy for Energy & Net-Zero.
           </p>
           <div style={{ display: "flex", gap: 18 }}>
-            <a href="/services" style={{ color: "var(--sand)", textDecoration: "none" }}>Services</a>
+            {/* Keep internal anchors consistent */}
+            <a href="#services" style={{ color: "var(--sand)", textDecoration: "none" }}>Services</a>
             <a href="#approach" style={{ color: "var(--sand)", textDecoration: "none" }}>Approach</a>
             <a href="#contact" style={{ color: "var(--sand)", textDecoration: "none" }}>Contact Us</a>
           </div>

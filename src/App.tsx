@@ -8,7 +8,7 @@ export default function App(): JSX.Element {
   const phone = "+447365155414";
   const canonical = "https://oddeeconsultancy.co.uk/";
 
-  // Normalise tel: (keep leading +, strip everything else that isn't a digit)
+  // Normalise tel: keep leading +, strip all non-digits after it
   const telHref = useMemo(() => {
     const normalised = phone.replace(/(?!^\+)[^\d]/g, "");
     return `tel:${normalised}`;

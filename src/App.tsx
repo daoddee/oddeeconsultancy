@@ -8,6 +8,9 @@ export default function App(): JSX.Element {
   const phone = "+447365155414";
   const canonical = "https://oddeeconsultancy.co.uk/";
 
+  // Mobile menu state
+  const [menuOpen, setMenuOpen] = useState(false);
+
   // Normalise tel: keep leading +, strip all non-digits after it
   const telHref = useMemo(() => {
     const normalised = phone.replace(/(?!^\+)[^\d]/g, "");
@@ -161,22 +164,73 @@ export default function App(): JSX.Element {
       s.textContent = `
         html, body, #root { background:#ffffff !important; }
         :root { color-scheme: light; }
-        .oddee, .oddee section, .oddee footer, .oddee .card { background:#ffffff; }
-        .oddee .section-head h2, .oddee .card h3, .oddee h1 { color:#0A0F0D; }
-        .oddee .hero { background:#0F3A30; color:#E8D7B1; }
-        .oddee .hero h1 { color:#E8D7B1; }
-        .oddee .contact-bar { background:#0A0F0D; color:#E8D7B1; }
-        .oddee .contact-bar a { color:#E8D7B1; }
+
+        /* Base */
+        .oddee { background:#fff; color:#0b1220; }
+
+        /* Header */
+        header.nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);
+          backdrop-filter:saturate(160%) blur(8px);border-bottom:1px solid #eaeaea}
+        .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+        .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+        .brand-title .t1{color:#0F3A30;font-weight:700;letter-spacing:.04em}
+        .brand-title .t2{color:#0F3A30;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+        nav[aria-label="primary"] a{margin:0 14px;text-decoration:none;color:#2a2f39}
+        .cta{padding:12px 16px;border-radius:12px;border:1.5px solid #0F3A30;color:#fff;background:#0F3A30;text-decoration:none;display:inline-block}
+
+        /* Mobile nav */
+        .menu-btn{display:none;border:1px solid #dfe3ea;border-radius:10px;padding:8px 10px;background:#fff}
+        .menu-icon{width:22px;height:2px;background:#0A0F0D;position:relative;display:block}
+        .menu-icon::before,.menu-icon::after{content:"";position:absolute;left:0;width:22px;height:2px;background:#0A0F0D}
+        .menu-icon::before{top:-6px}.menu-icon::after{top:6px}
+        .nav-links{display:flex;align-items:center;gap:8px}
+        .nav-drawer{display:none}
+
+        /* Hero */
+        .hero{background:#0F3A30;color:#E8D7B1;padding:72px 0}
+        .hero h1{color:#E8D7B1}
+        .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+        .eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:12px;opacity:.9}
+        h1{font-size:44px;line-height:1.1;margin:10px 0 14px}
+        .lead{opacity:.95;line-height:1.7}
+
+        /* Cards / Sections */
+        .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+        .panel{border-radius:22px;background:#fff;color:#1c1f24;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:22px}
+        main section{padding:70px 0}
+        .muted{color:#5b667a}
+        .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+        .card{border:1px solid #e9ebf0;border-radius:18px;padding:18px}
+        .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+        /* Form */
+        .form{border:1px solid #e9ebf0;border-radius:18px;padding:18px;background:#fff}
+        .input,.textarea{width:100%;padding:12px;border:1px solid #dfe3ea;border-radius:12px}
+        .textarea{min-height:120px;resize:vertical}
+        .stack{display:grid;gap:12px}
+
+        /* Footer */
+        footer.footer{background:#0A0F0D;color:#E8D7B1;padding:34px 0;margin-top:10px}
+        .footer-inner{display:flex;justify-content:space-between;align-items:center}
+
+        /* Responsive */
         @media (max-width: 980px) {
-          .nav-inner { padding: 12px 0; }
-          .nav-inner nav { display:flex; flex-wrap:wrap; gap:10px; }
-          .hero { padding: 56px 0; }
-          .hero-grid { grid-template-columns: 1fr !important; gap:18px; }
-          .cards { grid-template-columns: 1fr !important; }
-          .two { grid-template-columns: 1fr !important; }
-          .cta { width: 100%; text-align:center; }
-          h1 { font-size: 32px !important; }
-          .wrap { padding: 0 16px; }
+          .nav-links{display:none}           /* hide desktop links */
+          .menu-btn{display:inline-block}    /* show burger */
+          .hero{padding:56px 0}
+          .hero-grid{grid-template-columns:1fr !important;gap:18px}
+          .cards{grid-template-columns:1fr !important}
+          .two{grid-template-columns:1fr !important}
+          .cta{width:100%;text-align:center}
+          h1{font-size:32px !important}
+          .wrap{padding:0 16px}
+          .nav-drawer{display:block;position:absolute;left:0;right:0;top:60px;background:#fff;border-bottom:1px solid #eaeaea}
+          .nav-drawer a{display:block;padding:14px 20px;border-top:1px solid #f1f3f6;text-decoration:none;color:#2a2f39}
+        }
+
+        @media (max-width:600px){
+          .kpi{font-size:22px}
+          .panel{padding:16px}
         }
       `;
       document.head.appendChild(s);
@@ -190,62 +244,52 @@ export default function App(): JSX.Element {
 
   return (
     <div className="oddee">
-      <style>{`
-        :root { --green:#0F3A30; --sand:#E8D7B1; --ink:#0A0F0D; --txt:#0b1220; }
-        .oddee { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--txt); }
-        *{box-sizing:border-box}
-        .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
-        header.nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);backdrop-filter:saturate(160%) blur(8px);border-bottom:1px solid #eaeaea}
-        .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
-        .brand-title .t1{color:var(--green);font-weight:700;letter-spacing:.04em}
-        .brand-title .t2{color:var(--green);font-size:12px;letter-spacing:.18em;text-transform:uppercase}
-        nav[aria-label="primary"] a{margin:0 14px;text-decoration:none;color:#2a2f39}
-        .cta{padding:12px 16px;border-radius:12px;border:1.5px solid var(--green);color:#fff;background:var(--green);text-decoration:none;display:inline-block}
-        .hero{background:var(--green);color:var(--sand);padding:72px 0}
-        .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
-        .eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:12px;opacity:.9}
-        h1{font-size:44px;line-height:1.1;margin:10px 0 14px}
-        .lead{opacity:.95;line-height:1.7}
-        .hero-ctas{display:flex;gap:12px;margin-top:20px}
-        .hero-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:26px}
-        .kpi{font-size:26px;font-weight:650}
-        .kpi-sub{font-size:12px;opacity:.85}
-        .panel{border-radius:22px;background:#fff;color:#1c1f24;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:22px}
-        main section{padding:70px 0}
-        .muted{color:#5b667a}
-        .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
-        .card{border:1px solid #e9ebf0;border-radius:18px;padding:18px}
-        .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-        .form{border:1px solid #e9ebf0;border-radius:18px;padding:18px;background:#fff}
-        .input,.textarea{width:100%;padding:12px;border:1px solid #dfe3ea;border-radius:12px}
-        .textarea{min-height:120px;resize:vertical}
-        .stack{display:grid;gap:12px}
-        footer.footer{background:var(--ink);color:var(--sand);padding:34px 0;margin-top:10px}
-        .footer-inner{display:flex;justify-content:space-between;align-items:center}
-        @media (max-width:600px){
-          nav[aria-label="primary"] a{margin:0 10px}
-          .kpi{font-size:22px}
-          .panel{padding:16px}
-        }
-      `}</style>
-
       {/* HEADER / NAV */}
       <header className="nav">
         <div className="wrap nav-inner">
           <a href="/" className="brand" aria-label="Oddee Consulting home">
+            <img
+              src="/favicon.svg"
+              alt=""
+              aria-hidden="true"
+              width="28"
+              height="28"
+              style={{ display: "block" }}
+            />
             <span className="brand-title">
               <span className="t1">ODDEE</span><br />
               <span className="t2">Consulting</span>
             </span>
           </a>
-          <nav aria-label="primary">
+
+          {/* Desktop links */}
+          <nav className="nav-links" aria-label="primary">
             <a href="#services">Services</a>
             <a href="#approach">Approach</a>
             <a href="#faq">FAQ</a>
-            <a href="#contact">Contact Us</a>
+            <a className="cta" href="#contact">Contact Us</a>
           </nav>
-          <a className="cta" href="#contact">Contact Us</a>
+
+          {/* Mobile hamburger */}
+          <button
+            className="menu-btn"
+            aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <span className="menu-icon" />
+          </button>
         </div>
+
+        {/* Mobile drawer (only visible under 980px) */}
+        {menuOpen && (
+          <nav className="nav-drawer wrap" aria-label="mobile">
+            <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
+            <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
+            <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
+            <a href="#contact" onClick={() => setMenuOpen(false)}>Contact Us</a>
+          </nav>
+        )}
       </header>
 
       {/* HERO */}
@@ -260,14 +304,14 @@ export default function App(): JSX.Element {
               decarbonise toward net-zero. AI & web are adjacent accelerators, not the headline.
             </p>
             <div className="hero-ctas">
-              <a className="cta" href="#contact" style={{ background: "var(--sand)", color: "#0A0F0D", borderColor: "var(--sand)" }}>
+              <a className="cta" href="#contact" style={{ background: "#E8D7B1", color: "#0A0F0D", borderColor: "#E8D7B1" }}>
                 Contact Us
               </a>
             </div>
-            <div className="hero-kpis" aria-label="Key results">
-              <div><div className="kpi">10–30%</div><div className="kpi-sub">Typical site energy reduction</div></div>
-              <div><div className="kpi">5–20%</div><div className="kpi-sub">Cost-out via value engineering</div></div>
-              <div><div className="kpi">&lt;12 weeks</div><div className="kpi-sub">Time-to-value for priority fixes</div></div>
+            <div className="hero-kpis" aria-label="Key results" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18, marginTop: 26 }}>
+              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>10–30%</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Typical site energy reduction</div></div>
+              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>5–20%</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Cost-out via value engineering</div></div>
+              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>&lt;12 weeks</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Time-to-value for priority fixes</div></div>
             </div>
           </div>
 
@@ -371,7 +415,7 @@ export default function App(): JSX.Element {
       <section id="contact" className="contact-bar" aria-label="Contact Oddee Consulting">
         <div className="wrap two" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
           <div>
-            <h2 style={{ fontSize: 32, margin: 0, color: "var(--sand)" }}>Speak to an engineer</h2>
+            <h2 style={{ fontSize: 32, margin: 0, color: "#E8D7B1" }}>Speak to an engineer</h2>
             <p className="muted" style={{ color: "#f1e7cf" }}>
               Share your constraints and KPIs. We’ll map options and the fastest, lowest-risk route to value.
             </p>
@@ -408,13 +452,13 @@ export default function App(): JSX.Element {
       {/* FOOTER */}
       <footer className="footer">
         <div className="wrap footer-inner">
-          <p className="muted" style={{ color: "var(--sand)" }}>
+          <p className="muted" style={{ color: "#E8D7B1" }}>
             © {new Date().getFullYear()} Oddee Consulting. UK Engineering Consultancy for Energy & Net-Zero.
           </p>
           <div style={{ display: "flex", gap: 18 }}>
-            <a href="#services" style={{ color: "var(--sand)", textDecoration: "none" }}>Services</a>
-            <a href="#approach" style={{ color: "var(--sand)", textDecoration: "none" }}>Approach</a>
-            <a href="#contact" style={{ color: "var(--sand)", textDecoration: "none" }}>Contact Us</a>
+            <a href="#services" style={{ color: "#E8D7B1", textDecoration: "none" }}>Services</a>
+            <a href="#approach" style={{ color: "#E8D7B1", textDecoration: "none" }}>Approach</a>
+            <a href="#contact" style={{ color: "#E8D7B1", textDecoration: "none" }}>Contact Us</a>
           </div>
         </div>
       </footer>

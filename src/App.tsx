@@ -247,13 +247,13 @@ export default function App(): JSX.Element {
       {/* HEADER / NAV */}
       <header className="nav">
         <div className="wrap nav-inner">
+          {/* Brand with YOUR logo (place logo.png in /public) */}
           <a href="/" className="brand" aria-label="Oddee Consulting home">
             <img
-              src="ChatGPT Image Aug 22, 2025, 05_47_05 AM.png"
-              alt=""
-              aria-hidden="true"
-              width="28"
-              height="28"
+              src="/logo.png"
+              alt="Oddee Consulting Logo"
+              width="40"
+              height="40"
               style={{ display: "block" }}
             />
             <span className="brand-title">

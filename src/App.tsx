@@ -6,18 +6,19 @@ type SubmitState = "idle" | "sending" | "sent" | "error";
 export default function App(): JSX.Element {
   const email = "info@oddeeconsultancy.co.uk";
   const phone = "+447365155414";
+  const canonical = "https://oddeeconsultancy.co.uk/";
 
-  // Normalise tel: (remove all but leading + and digits)
+  // Normalise tel: (keep leading +, strip everything else that isn't a digit)
   const telHref = useMemo(() => {
     const normalised = phone.replace(/(?!^\+)[^\d]/g, "");
     return `tel:${normalised}`;
   }, [phone]);
 
   const mailHref = useMemo(() => `mailto:${email}`, [email]);
-  const canonical = "https://oddeeconsultancy.co.uk/";
 
+  // Contact form UX state
   const [status, setStatus] = useState<SubmitState>("idle");
-  const [errMsg, setErrMsg] = useState("");
+  const [errMsg, setErrMsg] = useState<string>("");
   const abortRef = useRef<AbortController | null>(null);
 
   function validate(payload: {
@@ -34,7 +35,7 @@ export default function App(): JSX.Element {
     return null;
   }
 
-  // Progressive-enhancement submit with robust timeout + graceful mailto fallback
+  // Progressive-enhancement submit with timeout + graceful mailto fallback
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrMsg("");
@@ -77,7 +78,7 @@ export default function App(): JSX.Element {
       try {
         data = await res.json();
       } catch {
-        // no-op: some backends return empty body on 204/200
+        // ok if backend returns empty body (e.g., 204)
       }
 
       if (!res.ok || (data && data.ok === false)) {
@@ -95,7 +96,7 @@ export default function App(): JSX.Element {
           : (err as any)?.message || "Could not reach the server.";
       setErrMsg(message);
 
-      // Graceful fallback to mailto only in the browser
+      // Fallback to mailto only in the browser
       if (typeof window !== "undefined") {
         const subject = encodeURIComponent(`Website enquiry — ${payload.name}`);
         const body = encodeURIComponent(
@@ -238,7 +239,6 @@ export default function App(): JSX.Element {
             </span>
           </a>
           <nav aria-label="primary">
-            {/* FIX: anchor to in-page section, not a 404 route */}
             <a href="#services">Services</a>
             <a href="#approach">Approach</a>
             <a href="#faq">FAQ</a>
@@ -412,7 +412,6 @@ export default function App(): JSX.Element {
             © {new Date().getFullYear()} Oddee Consulting. UK Engineering Consultancy for Energy & Net-Zero.
           </p>
           <div style={{ display: "flex", gap: 18 }}>
-            {/* Keep internal anchors consistent */}
             <a href="#services" style={{ color: "var(--sand)", textDecoration: "none" }}>Services</a>
             <a href="#approach" style={{ color: "var(--sand)", textDecoration: "none" }}>Approach</a>
             <a href="#contact" style={{ color: "var(--sand)", textDecoration: "none" }}>Contact Us</a>

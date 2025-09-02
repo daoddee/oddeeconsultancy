@@ -249,7 +249,7 @@ export default function App(): JSX.Element {
         <div className="wrap nav-inner">
           <a href="/" className="brand" aria-label="Oddee Consulting home">
             <img
-              src="/favicon.svg"
+              src="ChatGPT Image Aug 22, 2025, 05_47_05 AM.png"
               alt=""
               aria-hidden="true"
               width="28"

@@ -17,7 +17,10 @@
     "@types/node": "^22.5.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react-swc": "^3.7.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",      // or @vitejs/plugin-react if you chose Babel
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.12",
+    "autoprefixer": "^10.4.20",
     "typescript": "^5.5.4",
     "vite": "^5.4.2"
   },

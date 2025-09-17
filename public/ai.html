@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AI Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Tailwind (optional: your site already has styles; this keeps the page tidy) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React + ReactDOM from CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- In-browser JSX transform (so you don’t need a build step) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body class="bg-slate-50">
+    <div id="root" class="min-h-screen"></div>
+
+    <script type="text/babel">
+      // ---- PASTE of your component (already adjusted to call /api/chat) ----
+      // Minimal skeleton if you just want it running now:
+
+      const systemPrompt = "You are a helpful consultant.";
+
+      function App() {
+        const [messages, setMessages] = React.useState([]);
+        const [input, setInput] = React.useState("");
+        const [loading, setLoading] = React.useState(false);
+
+        const send = async () => {
+          if (!input.trim() || loading) return;
+          const next = [...messages, { role: "user", content: input }];
+          setMessages(next);
+          setInput("");
+          setLoading(true);
+
+          const resp = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              model: "qwen2.5:3b-instruct",
+              stream: true,
+              system: systemPrompt,
+              messages: next,
+            }),
+          });
+
+          const reader = resp.body.getReader();
+          const decoder = new TextDecoder();
+          let aiMsg = { role: "assistant", content: "" };
+          setMessages((m) => [...m, aiMsg]);
+
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value, { stream: true });
+            // Ollama streams NDJSON: one JSON object per line
+            for (const line of chunk.split("\n")) {
+              if (!line.trim()) continue;
+              try {
+                const json = JSON.parse(line);
+                const delta = json?.message?.content || "";
+                if (delta) {
+                  aiMsg.content += delta;
+                  setMessages((m) => {
+                    const copy = m.slice();
+                    copy[copy.length - 1] = { ...aiMsg };
+                    return copy;
+                  });
+                }
+              } catch {}
+            }
+          }
+          setLoading(false);
+        };
+
+        return (
+          <div className="max-w-3xl mx-auto p-4">
+            <h1 className="text-2xl font-bold mb-4">AI Consultant</h1>
+            <div className="space-y-3 bg-white rounded-xl p-4 shadow">
+              {messages.map((m, i) => (
+                <div key={i} className={m.role === "user" ? "text-right" : "text-left"}>
+                  <div className={"inline-block px-3 py-2 rounded-2xl " + (m.role === "user" ? "bg-sky-100" : "bg-gray-100")}>
+                    <span className="whitespace-pre-wrap">{m.content}</span>
+                  </div>
+                </div>
+              ))}
+              <div className="flex gap-2 pt-2">
+                <input
+                  className="flex-1 border rounded-xl px-3 py-2"
+                  placeholder="Ask a question…"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" ? send() : null}
+                />
+                <button className="px-4 py-2 rounded-xl bg-black text-white disabled:opacity-50"
+                        disabled={loading} onClick={send}>
+                  {loading ? "Thinking…" : "Send"}
+                </button>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-3">Backed by your local Ollama via Vercel proxy.</p>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>

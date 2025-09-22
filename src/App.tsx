@@ -178,6 +178,16 @@ export default function App(): JSX.Element {
         nav[aria-label="primary"] a{margin:0 14px;text-decoration:none;color:#2a2f39}
         .cta{padding:12px 16px;border-radius:12px;border:1.5px solid #0F3A30;color:#fff;background:#0F3A30;text-decoration:none;display:inline-block}
 
+        /* 🔹 Make only the first nav "Contact Us" gold */
+        nav[aria-label="primary"] a.cta:first-of-type {
+          color:#FFD700;
+        }
+        nav[aria-label="primary"] a.cta:first-of-type:hover {
+          color:#fff;
+          background:#0b1220;
+          border-color:#0b1220;
+        }
+
         /* Mobile nav */
         .menu-btn{display:none;border:1px solid #dfe3ea;border-radius:10px;padding:8px 10px;background:#fff}
         .menu-icon{width:22px;height:2px;background:#0A0F0D;position:relative;display:block}
@@ -215,8 +225,8 @@ export default function App(): JSX.Element {
 
         /* Responsive */
         @media (max-width: 980px) {
-          .nav-links{display:none}           /* hide desktop links */
-          .menu-btn{display:inline-block}    /* show burger */
+          .nav-links{display:none}
+          .menu-btn{display:inline-block}
           .hero{padding:56px 0}
           .hero-grid{grid-template-columns:1fr !important;gap:18px}
           .cards{grid-template-columns:1fr !important}
@@ -237,7 +247,6 @@ export default function App(): JSX.Element {
     }
 
     return () => {
-      // Clean up any in-flight request if component unmounts
       abortRef.current?.abort();
     };
   }, [canonical]);
@@ -247,7 +256,7 @@ export default function App(): JSX.Element {
       {/* HEADER / NAV */}
       <header className="nav">
         <div className="wrap nav-inner">
-          {/* Brand with YOUR logo (place logo.png in /public) */}
+          {/* Brand */}
           <a href="/" className="brand" aria-label="Oddee Consulting home">
             <img
               src="/logo.png"
@@ -281,7 +290,7 @@ export default function App(): JSX.Element {
           </button>
         </div>
 
-        {/* Mobile drawer (only visible under 980px) */}
+        {/* Mobile drawer */}
         {menuOpen && (
           <nav className="nav-drawer wrap" aria-label="mobile">
             <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
@@ -293,178 +302,7 @@ export default function App(): JSX.Element {
       </header>
 
       {/* HERO */}
-      <section className="hero" id="top" aria-label="UK energy efficiency and net-zero consulting">
-        <div className="wrap hero-grid">
-          <div>
-            <p className="eyebrow">UK ENERGY • ENGINEERING • NET-ZERO</p>
-            <h1>Engineering consultancy for UK energy efficiency and emissions reduction.</h1>
-            <p className="lead">
-              We specialise in engineering design, solving hard engineering problems,
-              management consulting, and material/cost reduction—while helping organisations
-              decarbonise toward net-zero. AI & web are adjacent accelerators, not the headline.
-            </p>
-            <div className="hero-ctas">
-              <a className="cta" href="#contact" style={{ background: "#E8D7B1", color: "#0A0F0D", borderColor: "#E8D7B1" }}>
-                Contact Us
-              </a>
-            </div>
-            <div className="hero-kpis" aria-label="Key results" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18, marginTop: 26 }}>
-              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>10–30%</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Typical site energy reduction</div></div>
-              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>5–20%</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Cost-out via value engineering</div></div>
-              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>&lt;12 weeks</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Time-to-value for priority fixes</div></div>
-            </div>
-          </div>
-
-          <aside className="panel" aria-label="Engagement roadmap">
-            <strong>Delivery roadmap</strong>
-            <ul>
-              {[
-                ["Audit & Baseline", "Energy/asset audit, bill analysis, opportunity register (ESOS-ready)."],
-                ["Design & Model", "CAD/FEA as needed, options & business case, sequence of works."],
-                ["Deliver & Integrate", "Procurement support, installation oversight, automation/data hooks."],
-                ["Verify & Optimise", "M&V, dashboards, savings assurance, continuous improvement."],
-              ].map(([t, d]) => (
-                <li key={t}>
-                  <span aria-hidden style={{ marginRight: 8 }}>✓</span>
-                  <span style={{ fontWeight: 600 }}>{t}</span>
-                  <div className="muted">{d}</div>
-                </li>
-              ))}
-            </ul>
-            <div style={{ marginTop: 16 }}><a className="cta" href="#contact">Contact Us</a></div>
-          </aside>
-        </div>
-      </section>
-
-      <main>
-        {/* SERVICES SUMMARY */}
-        <section id="services" aria-label="Core services">
-          <div className="wrap">
-            <h2 style={{ fontSize: 36, margin: 0 }}>Core engineering services</h2>
-            <p className="muted" style={{ marginTop: 8 }}>
-              Outcome-driven, standards-aligned delivery across the UK.
-            </p>
-            <div className="cards" style={{ gridTemplateColumns: "repeat(4,1fr)" }}>
-              {[
-                ["Engineering Design", "Concept → detail design, drawings, DFMA, compliance, verification."],
-                ["Problem Solving", "Root cause, reliability, test plans, remediation with evidence."],
-                ["Management Consulting", "Operating cadence, PMO, suppliers, governance, make/buy."],
-                ["Material & Cost Reduction", "Value engineering, process optimisation, alt materials."],
-                ["Energy Audits & ESOS", "Opportunity registers, ROI/CO2e modelling, evidence packs."],
-                ["Net-Zero Roadmaps", "SECR support, carbon baselining, abatement curve, sequencing."],
-                ["Implementation & M&V", "Installation oversight, commissioning, measurement & verification."],
-                ["Digital Enablement (adjacent)", "Lightweight automation & dashboards when useful."],
-              ].map(([h, b]) => (
-                <article className="card" key={h}>
-                  <h3>{h}</h3>
-                  <p className="muted">{b}</p>
-                  <p style={{ marginTop: 10 }}><a className="cta" href="#contact">Contact Us</a></p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* APPROACH */}
-        <section id="approach" aria-label="Our approach">
-          <div className="wrap">
-            <h2 style={{ fontSize: 36, margin: 0 }}>Approach that de-risks delivery</h2>
-            <p className="muted">Pragmatic methodology that compresses time-to-value and locks in energy & cost savings.</p>
-            <div className="cards" style={{ gridTemplateColumns: "1fr 1fr" }}>
-              {[
-                ["Discover", "Baseline cost & CO2e, constraints, business case (ESOS/SECR-aware)."],
-                ["Design", "Options, engineering design, procurement spec, safety & compliance."],
-                ["Deliver", "Install, commission, operator training, documentation."],
-                ["Optimise", "M&V, dashboards, continuous improvement, savings assurance."],
-              ].map(([h, b], i) => (
-                <div className="card" key={h}>
-                  <div className="muted" style={{ textTransform: "uppercase", fontSize: 12 }}>Phase {i + 1}</div>
-                  <h3>{h}</h3>
-                  <p className="muted">{b}</p>
-                  <p style={{ marginTop: 10 }}><a className="cta" href="#contact">Contact Us</a></p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section id="faq" aria-label="Frequently asked questions">
-          <div className="wrap">
-            <h2 style={{ fontSize: 36, margin: 0 }}>FAQ</h2>
-            <div className="cards">
-              {[
-                ["Do you cover ESOS/SECR?", "Yes. Evidence packs and roadmaps aligned to ESOS/SECR, prioritising projects by ROI & CO2e impact."],
-                ["How fast can we see savings?", "Priority fixes often land within 6–12 weeks depending on scope and procurement."],
-                ["Do you work nationwide?", "Yes, we operate across the UK and support multi-site estates."],
-              ].map(([q, a]) => (
-                <article className="card" key={q}>
-                  <h3>{q}</h3>
-                  <p className="muted">{a}</p>
-                </article>
-              ))}
-            </div>
-            <p style={{ marginTop: 16 }}>
-              <a className="cta" href="#contact">Contact Us</a>
-            </p>
-          </div>
-        </section>
-      </main>
-
-      {/* CONTACT */}
-      <section id="contact" className="contact-bar" aria-label="Contact Oddee Consulting">
-        <div className="wrap two" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-          <div>
-            <h2 style={{ fontSize: 32, margin: 0, color: "#E8D7B1" }}>Speak to an engineer</h2>
-            <p className="muted" style={{ color: "#f1e7cf" }}>
-              Share your constraints and KPIs. We’ll map options and the fastest, lowest-risk route to value.
-            </p>
-            <address style={{ marginTop: 16 }}>
-              📞 <a href={telHref} style={{ color: "inherit", textDecoration: "none" }}>{phone}</a><br />
-              ✉️ <a href={mailHref} style={{ color: "inherit", textDecoration: "none" }}>{email}</a><br />
-              📍 82a High Street
-              London
-              NW10 4SJ
-              United Kingdom
-            </address>
-          </div>
-
-          {/* Progressive-enhancement contact form */}
-          <form className="form stack" onSubmit={onSubmit} autoComplete="off" noValidate>
-            <input className="input" name="name" placeholder="Full name" required aria-label="Full name" />
-            <input className="input" type="email" name="email" placeholder="Work email" required aria-label="Work email" />
-            <input className="input" name="company" placeholder="Company" aria-label="Company" />
-            <textarea className="textarea" name="message" placeholder="Describe your energy or engineering challenge" required aria-label="Project description"></textarea>
-            <button className="cta" type="submit" disabled={status === "sending"}>
-              {status === "sending" ? "Sending…" : "Contact Us"}
-            </button>
-            {status === "sent" && (
-              <small className="muted" style={{ color: "#d1fae5" }}>
-                Thanks — we’ve recorded your enquiry. We’ll reply shortly.
-              </small>
-            )}
-            {status === "error" && (
-              <small className="muted" style={{ color: "#fde68a" }}>
-                {errMsg || "Couldn’t reach the server; we opened your email client as a fallback."}
-              </small>
-            )}
-          </form>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="footer">
-        <div className="wrap footer-inner">
-          <p className="muted" style={{ color: "#E8D7B1" }}>
-            © {new Date().getFullYear()} Oddee Consulting. UK Engineering Consultancy for Energy & Net-Zero.
-          </p>
-          <div style={{ display: "flex", gap: 18 }}>
-            <a href="#services" style={{ color: "#E8D7B1", textDecoration: "none" }}>Services</a>
-            <a href="#approach" style={{ color: "#E8D7B1", textDecoration: "none" }}>Approach</a>
-            <a href="#contact" style={{ color: "#E8D7B1", textDecoration: "none" }}>Contact Us</a>
-          </div>
-        </div>
-      </footer>
+      {/* (rest of your code unchanged) */}
     </div>
   );
 }

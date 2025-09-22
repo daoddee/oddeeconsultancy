@@ -179,7 +179,7 @@ export default function App(): JSX.Element {
         .cta{padding:12px 16px;border-radius:12px;border:1.5px solid #0F3A30;color:#fff;background:#0F3A30;text-decoration:none;display:inline-block}
 
         /* Only the first header-nav "Contact Us" text colour + hover */
-        nav[aria-label="primary"] a.cta:first-of-type { color:#FFD700; }
+       nav[aria-label="primary"] a.cta:first-of-type { color:#fff; }
         nav[aria-label="primary"] a.cta:first-of-type:hover {
           color:#fff;
           background:#0b1220;

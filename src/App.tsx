@@ -130,7 +130,7 @@ export default function App(): JSX.Element {
     };
 
     document.title =
-      "Oddee Consulting | UK Engineering Consultancy for Energy Efficiency & Net-Zero";
+      "Oddee Consulting | Stop Greenwashing. Win Trust. Fast, Accurate Scope 1–3.";
 
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!link) {
@@ -142,16 +142,23 @@ export default function App(): JSX.Element {
 
     setMeta(
       "description",
-      "Oddee Consulting: UK engineering design, problem solving, management consulting, material & cost reduction, and net-zero delivery."
+      "Fast, accurate Scope 1, 2 & 3 emissions reporting that saves money, reduces risk, and protects your reputation. No greenwash. Real results."
     );
     setMeta("robots", "index,follow");
-    setMeta("og:title", "Oddee Consulting — UK Energy & Net-Zero Engineering Consultancy", "property");
-    setMeta("og:description", "Engineering design, problem solving, value engineering & emissions reduction across the UK.", "property");
+    setMeta("og:title", "Oddee Consulting — Fast, Accurate Emissions Reporting", "property");
+    setMeta(
+      "og:description",
+      "Stop greenwashing. Start winning trust. Evidence-backed carbon baselining and roadmaps with a simple 3-step plan.",
+      "property"
+    );
     setMeta("og:type", "website", "property");
     setMeta("og:url", canonical, "property");
     setMeta("twitter:card", "summary_large_image");
-    setMeta("twitter:title", "Oddee Consulting — Engineering for UK Energy & Net-Zero");
-    setMeta("twitter:description", "UK engineering consultancy driving energy savings, emissions reduction and cost-out.");
+    setMeta("twitter:title", "Oddee Consulting — Stop Greenwashing. Win Trust.");
+    setMeta(
+      "twitter:description",
+      "Scope 1–3 done right: fast, accurate, audit-ready. Save money. Reduce risk. Future-proof your business."
+    );
 
     // Force a light surface even if a global dark theme is present
     document.documentElement.classList.remove("dark");
@@ -275,7 +282,7 @@ export default function App(): JSX.Element {
             <a href="#services">Services</a>
             <a href="#approach">Approach</a>
             <a href="#faq">FAQ</a>
-            <a className="cta" href="#contact">Contact Us</a>
+            <a className="cta" href="#contact">Get a Report</a>
           </nav>
 
           {/* Mobile hamburger */}
@@ -295,7 +302,7 @@ export default function App(): JSX.Element {
             <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
             <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
             <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
-            <a href="#contact" onClick={() => setMenuOpen(false)}>Contact Us</a>
+            <a href="#contact" onClick={() => setMenuOpen(false)}>Get a Report</a>
           </nav>
         )}
       </header>
@@ -305,32 +312,32 @@ export default function App(): JSX.Element {
         <div className="wrap hero-grid">
           <div>
             <p className="eyebrow">UK ENERGY • ENGINEERING • NET-ZERO</p>
-            <h1>Engineering consultancy for UK energy efficiency and emissions reduction.</h1>
+            <h1>Stop greenwashing. Start winning trust.</h1>
             <p className="lead">
-              We specialise in engineering design, solving hard engineering problems,
-              management consulting, and material/cost reduction—while helping organisations
-              decarbonise toward net-zero. AI & web are adjacent accelerators, not the headline.
+              Fast, accurate Scope 1, 2 &amp; 3 emissions reporting — so you save money,
+              reduce risk, and future-proof your business. We guide you with a simple
+              plan and evidence you can stand behind.
             </p>
             <div className="hero-ctas">
               <a className="cta" href="#contact" style={{ background: "#E8D7B1", color: "#0A0F0D", borderColor: "#E8D7B1" }}>
-                Contact Us
+                Get Your Certified Report
               </a>
             </div>
             <div className="hero-kpis" aria-label="Key results" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18, marginTop: 26 }}>
-              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>10–30%</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Typical site energy reduction</div></div>
-              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>5–20%</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Cost-out via value engineering</div></div>
-              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>&lt;12 weeks</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Time-to-value for priority fixes</div></div>
+              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>10–30%</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Typical energy cost reduction</div></div>
+              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>Audit-ready</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>ESOS/SECR evidence packs</div></div>
+              <div><div className="kpi" style={{ fontSize: 26, fontWeight: 650 }}>&lt;12 weeks</div><div className="kpi-sub" style={{ fontSize: 12, opacity: .85 }}>Time to verified savings</div></div>
             </div>
           </div>
 
           <aside className="panel" aria-label="Engagement roadmap">
-            <strong>Delivery roadmap</strong>
+            <strong>3-step plan to proof &amp; savings</strong>
             <ul>
               {[
-                ["Audit & Baseline", "Energy/asset audit, bill analysis, opportunity register (ESOS-ready)."],
-                ["Design & Model", "CAD/FEA as needed, options & business case, sequence of works."],
-                ["Deliver & Integrate", "Procurement support, installation oversight, automation/data hooks."],
-                ["Verify & Optimise", "M&V, dashboards, savings assurance, continuous improvement."],
+                ["Audit & Baseline", "We establish a defensible baseline: bills, assets, Scope 1–3, and an opportunity register."],
+                ["Design & Model", "We size the wins: options, ROI & CO2e impact, business case, sequence of works."],
+                ["Deliver & Verify", "Procurement support, install oversight, M&V dashboards — no greenwash, just results."],
+                ["Optimise", "Lock in savings with continuous improvement and assurance reporting."]
               ].map(([t, d]) => (
                 <li key={t}>
                   <span aria-hidden style={{ marginRight: 8 }}>✓</span>
@@ -339,7 +346,7 @@ export default function App(): JSX.Element {
                 </li>
               ))}
             </ul>
-            <div style={{ marginTop: 16 }}><a className="cta" href="#contact">Contact Us</a></div>
+            <div style={{ marginTop: 16 }}><a className="cta" href="#contact">Start the Plan</a></div>
           </aside>
         </div>
       </section>
@@ -348,25 +355,25 @@ export default function App(): JSX.Element {
         {/* SERVICES SUMMARY */}
         <section id="services" aria-label="Core services">
           <div className="wrap">
-            <h2 style={{ fontSize: 36, margin: 0 }}>Core engineering services</h2>
+            <h2 style={{ fontSize: 36, margin: 0 }}>Problems we solve — and what you get</h2>
             <p className="muted" style={{ marginTop: 8 }}>
-              Outcome-driven, standards-aligned delivery across the UK.
+              Make money, save money, reduce risk. Outcome-driven, standards-aligned delivery across the UK.
             </p>
             <div className="cards" style={{ gridTemplateColumns: "repeat(4,1fr)" }}>
               {[
-                ["Engineering Design", "Concept → detail design, drawings, DFMA, compliance, verification."],
-                ["Problem Solving", "Root cause, reliability, test plans, remediation with evidence."],
-                ["Management Consulting", "Operating cadence, PMO, suppliers, governance, make/buy."],
-                ["Material & Cost Reduction", "Value engineering, process optimisation, alt materials."],
-                ["Energy Audits & ESOS", "Opportunity registers, ROI/CO2e modelling, evidence packs."],
-                ["Net-Zero Roadmaps", "SECR support, carbon baselining, abatement curve, sequencing."],
-                ["Implementation & M&V", "Installation oversight, commissioning, measurement & verification."],
-                ["Digital Enablement (adjacent)", "Lightweight automation & dashboards when useful."],
+                ["Engineering Design", "Concept → detail design, drawings, DFMA, compliance, verification — from idea to implemented."],
+                ["Problem Solving", "Root cause, reliability, test plans, and fixes that stick — with evidence you can show stakeholders."],
+                ["Management Consulting", "Operating cadence, PMO, suppliers, governance, make/buy — de-risk execution and speed decisions."],
+                ["Material & Cost Reduction", "Value engineering, process optimisation, alternative materials — cut cost without cutting quality."],
+                ["Energy Audits & ESOS", "Opportunity registers, ROI/CO2e modelling, audit-ready evidence packs — no surprises on review."],
+                ["Net-Zero Roadmaps", "Carbon baselining, abatement curve, sequencing — credible paths to targets without fluff."],
+                ["Implementation & M&V", "Install oversight, commissioning, measurement & verification — prove savings, not promises."],
+                ["Digital Enablement (adjacent)", "Lightweight automation & dashboards where it saves time or reduces errors — no bloatware."]
               ].map(([h, b]) => (
                 <article className="card" key={h}>
                   <h3>{h}</h3>
                   <p className="muted">{b}</p>
-                  <p style={{ marginTop: 10 }}><a className="cta" href="#contact">Contact Us</a></p>
+                  <p style={{ marginTop: 10 }}><a className="cta" href="#contact">Get a Report</a></p>
                 </article>
               ))}
             </div>
@@ -376,20 +383,20 @@ export default function App(): JSX.Element {
         {/* APPROACH */}
         <section id="approach" aria-label="Our approach">
           <div className="wrap">
-            <h2 style={{ fontSize: 36, margin: 0 }}>Approach that de-risks delivery</h2>
-            <p className="muted">Pragmatic methodology that compresses time-to-value and locks in energy & cost savings.</p>
+            <h2 style={{ fontSize: 36, margin: 0 }}>A guide, not a hero — method that de-risks delivery</h2>
+            <p className="muted">Clear plan, faster time-to-value, and audit-ready outputs that stakeholders trust.</p>
             <div className="cards" style={{ gridTemplateColumns: "1fr 1fr" }}>
               {[
-                ["Discover", "Baseline cost & CO2e, constraints, business case (ESOS/SECR-aware)."],
-                ["Design", "Options, engineering design, procurement spec, safety & compliance."],
-                ["Deliver", "Install, commission, operator training, documentation."],
-                ["Optimise", "M&V, dashboards, continuous improvement, savings assurance."],
+                ["Discover", "Establish baseline cost & CO2e, map constraints, build the business case (ESOS/SECR-aware)."],
+                ["Design", "Right-size the solutions: options, engineering design, procurement spec, safety & compliance."],
+                ["Deliver", "Oversee install & commissioning, train operators, document everything for audit and handover."],
+                ["Optimise", "Measurement & verification, dashboards, continuous improvement to lock in and grow savings."]
               ].map(([h, b], i) => (
                 <div className="card" key={h}>
                   <div className="muted" style={{ textTransform: "uppercase", fontSize: 12 }}>Phase {i + 1}</div>
                   <h3>{h}</h3>
                   <p className="muted">{b}</p>
-                  <p style={{ marginTop: 10 }}><a className="cta" href="#contact">Contact Us</a></p>
+                  <p style={{ marginTop: 10 }}><a className="cta" href="#contact">Talk to the Team</a></p>
                 </div>
               ))}
             </div>
@@ -402,9 +409,9 @@ export default function App(): JSX.Element {
             <h2 style={{ fontSize: 36, margin: 0 }}>FAQ</h2>
             <div className="cards">
               {[
-                ["Do you cover ESOS/SECR?", "Yes. Evidence packs and roadmaps aligned to ESOS/SECR, prioritising projects by ROI & CO2e impact."],
-                ["How fast can we see savings?", "Priority fixes often land within 6–12 weeks depending on scope and procurement."],
-                ["Do you work nationwide?", "Yes, we operate across the UK and support multi-site estates."],
+                ["Is this ESOS/SECR compliant?", "Yes. We deliver audit-ready evidence packs and roadmaps aligned to ESOS/SECR with projects prioritised by ROI and CO2e impact."],
+                ["How quickly do we see results?", "Most clients see priority fixes land within 6–12 weeks depending on scope and procurement — with measurable savings."],
+                ["Do you work nationwide?", "Yes. We support single sites and multi-site estates across the UK with consistent methodology and governance."],
               ].map(([q, a]) => (
                 <article className="card" key={q}>
                   <h3>{q}</h3>
@@ -413,7 +420,7 @@ export default function App(): JSX.Element {
               ))}
             </div>
             <p style={{ marginTop: 16 }}>
-              <a className="cta" href="#contact">Contact Us</a>
+              <a className="cta" href="#contact">Book a Free Consultation</a>
             </p>
           </div>
         </section>
@@ -423,9 +430,10 @@ export default function App(): JSX.Element {
       <section id="contact" className="contact-bar" aria-label="Contact Oddee Consulting">
         <div className="wrap two" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
           <div>
-            <h2 style={{ fontSize: 32, margin: 0, color: "#E8D7B1" }}>Speak to an engineer</h2>
+            <h2 style={{ fontSize: 32, margin: 0, color: "#E8D7B1" }}>Speak to a specialist</h2>
             <p className="muted" style={{ color: "#f1e7cf" }}>
-              Share your constraints and KPIs. We’ll map options and the fastest, lowest-risk route to value.
+              Tell us your constraints and KPIs. We’ll give you a 3-step plan to achieve
+              fast, verifiable savings and an audit-ready emissions report — without the stress.
             </p>
             <address style={{ marginTop: 16 }}>
               📞 <a href={telHref} style={{ color: "inherit", textDecoration: "none" }}>{phone}</a><br />
@@ -442,13 +450,13 @@ export default function App(): JSX.Element {
             <input className="input" name="name" placeholder="Full name" required aria-label="Full name" />
             <input className="input" type="email" name="email" placeholder="Work email" required aria-label="Work email" />
             <input className="input" name="company" placeholder="Company" aria-label="Company" />
-            <textarea className="textarea" name="message" placeholder="Describe your energy or engineering challenge" required aria-label="Project description"></textarea>
+            <textarea className="textarea" name="message" placeholder="What are you trying to solve? (Scope 1–3, ESOS/SECR, energy costs…)" required aria-label="Project description"></textarea>
             <button className="cta" type="submit" disabled={status === "sending"}>
-              {status === "sending" ? "Sending…" : "Contact Us"}
+              {status === "sending" ? "Sending…" : "Get Your Certified Report"}
             </button>
             {status === "sent" && (
               <small className="muted" style={{ color: "#d1fae5" }}>
-                Thanks — we’ve recorded your enquiry. We’ll reply shortly.
+                Thanks — your enquiry is in. We’ll respond shortly with next steps.
               </small>
             )}
             {status === "error" && (
@@ -464,12 +472,12 @@ export default function App(): JSX.Element {
       <footer className="footer">
         <div className="wrap footer-inner">
           <p className="muted" style={{ color: "#E8D7B1" }}>
-            © {new Date().getFullYear()} Oddee Consulting. UK Engineering Consultancy for Energy & Net-Zero.
+            © {new Date().getFullYear()} Oddee Consulting. Fast, accurate emissions reporting and engineering delivery — UK-wide.
           </p>
           <div style={{ display: "flex", gap: 18 }}>
             <a href="#services" style={{ color: "#E8D7B1", textDecoration: "none" }}>Services</a>
             <a href="#approach" style={{ color: "#E8D7B1", textDecoration: "none" }}>Approach</a>
-            <a href="#contact" style={{ color: "#E8D7B1", textDecoration: "none" }}>Contact Us</a>
+            <a href="#contact" style={{ color: "#E8D7B1", textDecoration: "none" }}>Get a Report</a>
           </div>
         </div>
       </footer>

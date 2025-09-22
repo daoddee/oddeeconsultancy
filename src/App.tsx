@@ -422,7 +422,10 @@ export default function App(): JSX.Element {
             <address style={{ marginTop: 16 }}>
               📞 <a href={telHref} style={{ color: "inherit", textDecoration: "none" }}>{phone}</a><br />
               ✉️ <a href={mailHref} style={{ color: "inherit", textDecoration: "none" }}>{email}</a><br />
-              📍 United Kingdom
+              📍 82a High Street
+              London
+              NW10 4SJ
+              United Kingdom
             </address>
           </div>
 

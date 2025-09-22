@@ -277,24 +277,37 @@ export default function App(): JSX.Element {
             </span>
           </a>
 
-          {/* Desktop links */}
-          <nav className="nav-links" aria-label="primary">
-            <a href="#services">Services</a>
-            <a href="#approach">Approach</a>
-            <a href="#faq">FAQ</a>
-            <a className="cta" href="#contact">Get a Report</a>
-          </nav>
+         {/* Desktop links */}
+<nav className="nav-links" aria-label="primary">
+  <a href="#services">Services</a>
+  <a href="#approach">Approach</a>
+  <a href="#faq">FAQ</a>
+  <a
+    className="cta"
+    href="#contact"
+    style={{ background: "#ffffff", color: "#0F3A30", borderColor: "#0F3A30" }}
+  >
+    Get a Report
+  </a>
+</nav>
 
-          {/* Mobile hamburger */}
-          <button
-            className="menu-btn"
-            aria-label="Toggle navigation"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            <span className="menu-icon" />
-          </button>
-        </div>
+{/* Mobile drawer (only visible under 980px) */}
+{menuOpen && (
+  <nav className="nav-drawer wrap" aria-label="mobile">
+    <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
+    <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
+    <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
+    <a
+      href="#contact"
+      onClick={() => setMenuOpen(false)}
+      className="cta"
+      style={{ background: "#ffffff", color: "#0F3A30", borderColor: "#0F3A30" }}
+    >
+      Get a Report
+    </a>
+  </nav>
+)}
+
 
         {/* Mobile drawer (only visible under 980px) */}
         {menuOpen && (

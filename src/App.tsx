@@ -259,67 +259,66 @@ export default function App(): JSX.Element {
 
   return (
     <div className="oddee">
-      {/* HEADER / NAV */}
-      <header className="nav">
-        <div className="wrap nav-inner">
-          {/* Brand with YOUR logo (place logo.png in /public) */}
-          <a href="/" className="brand" aria-label="Oddee Consulting home">
-            <img
-              src="/logo.png"
-              alt="Oddee Consulting Logo"
-              width="40"
-              height="40"
-              style={{ display: "block" }}
-            />
-            <span className="brand-title">
-              <span className="t1">ODDEE</span><br />
-              <span className="t2">Consulting</span>
-            </span>
-          </a>
-
-         {/* Desktop links */}
-<nav className="nav-links" aria-label="primary">
-  <a href="#services">Services</a>
-  <a href="#approach">Approach</a>
-  <a href="#faq">FAQ</a>
-  <a
-    className="cta"
-    href="#contact"
-    style={{ background: "#ffffff", color: "#0F3A30", borderColor: "#0F3A30" }}
-  >
-    Get a Report
-  </a>
-</nav>
-
-{/* Mobile drawer (only visible under 980px) */}
-{menuOpen && (
-  <nav className="nav-drawer wrap" aria-label="mobile">
-    <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
-    <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
-    <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
-    <a
-      href="#contact"
-      onClick={() => setMenuOpen(false)}
-      className="cta"
-      style={{ background: "#ffffff", color: "#0F3A30", borderColor: "#0F3A30" }}
-    >
-      Get a Report
+     {/* HEADER / NAV */}
+<header className="nav">
+  <div className="wrap nav-inner">
+    {/* Brand with YOUR logo (place logo.png in /public) */}
+    <a href="/" className="brand" aria-label="Oddee Consulting home">
+      <img
+        src="/logo.png"
+        alt="Oddee Consulting Logo"
+        width="40"
+        height="40"
+        style={{ display: "block" }}
+      />
+      <span className="brand-title">
+        <span className="t1">ODDEE</span><br />
+        <span className="t2">Consulting</span>
+      </span>
     </a>
-  </nav>
-)}
 
+    {/* Desktop links */}
+    <nav className="nav-links" aria-label="primary">
+      <a href="#services">Services</a>
+      <a href="#approach">Approach</a>
+      <a href="#faq">FAQ</a>
+      <a
+        className="cta"
+        href="#contact"
+        style={{ background: "#ffffff", color: "#0F3A30", borderColor: "#0F3A30" }}
+      >
+        Get a Report
+      </a>
+    </nav>
 
-        {/* Mobile drawer (only visible under 980px) */}
-        {menuOpen && (
-          <nav className="nav-drawer wrap" aria-label="mobile">
-            <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
-            <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
-            <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
-            <a href="#contact" onClick={() => setMenuOpen(false)}>Get a Report</a>
-          </nav>
-        )}
-      </header>
+    {/* Mobile hamburger */}
+    <button
+      className="menu-btn"
+      aria-label="Toggle navigation"
+      aria-expanded={menuOpen}
+      onClick={() => setMenuOpen((v) => !v)}
+    >
+      <span className="menu-icon" />
+    </button>
+  </div> {/* ✅ closes .wrap.nav-inner */}
 
+  {/* Mobile drawer (only visible under 980px) */}
+  {menuOpen && (
+    <nav className="nav-drawer wrap" aria-label="mobile">
+      <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
+      <a href="#approach" onClick={() => setMenuOpen(false)}>Approach</a>
+      <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
+      <a
+        href="#contact"
+        onClick={() => setMenuOpen(false)}
+        className="cta"
+        style={{ background: "#ffffff", color: "#0F3A30", borderColor: "#0F3A30" }}
+      >
+        Get a Report
+      </a>
+    </nav>
+  )}
+</header>
       {/* HERO */}
       <section className="hero" id="top" aria-label="UK energy efficiency and net-zero consulting">
         <div className="wrap hero-grid">
